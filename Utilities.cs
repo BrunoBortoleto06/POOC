@@ -42,6 +42,11 @@ internal class Utilities
                 Console.Clear();
                 ShowInventoryManagement();
                 break;
+
+            case 2:
+                Console.Clear();
+                ShowOrderManagement();
+                break;
         }
 
     }
@@ -158,6 +163,15 @@ internal class Utilities
 
         }
     }
+
+    public static void ShowOrderManagement()
+    {
+        Console.WriteLine("1 - Open order overview");
+        Console.WriteLine("2 - Add new orders");
+        Console.WriteLine("0 - back to main menu");
+        int choice = ReadIntLine("Your selection: ");
+    }
+
     public static int ReadInt(string message)
     {
         Console.WriteLine(message);
