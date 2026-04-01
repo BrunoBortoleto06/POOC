@@ -6,33 +6,173 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POOC
+namespace POOC;
+
+internal class Utilities
 {
-    internal class Utilities
+
+    private static List<Product> inventory = new();
+    private static List<Order> orders = new();
+
+
+    public static void PrintWelcome()
     {
+        Console.WriteLine("                            .-'''-.        .-'''-.           _..._     \r\n                           '   _    \\     '   _    \\      .-'_..._''.  \r\n_________   _...._       /   /` '.   \\  /   /` '.   \\   .' .'      '.\\ \r\n\\        |.'      '-.   .   |     \\  ' .   |     \\  '  / .'            \r\n \\        .'```'.    '. |   '      |  '|   '      |  '. '              \r\n  \\      |       \\     \\\\    \\     / / \\    \\     / / | |              \r\n   |     |        |    | `.   ` ..' /   `.   ` ..' /  | |              \r\n   |      \\      /    .     '-...-'`       '-...-'`   . '              \r\n   |     |\\`'-.-'   .'                                 \\ '.          . \r\n   |     | '-....-'`                                    '. `._____.-'/ \r\n  .'     '.                                               `-.______ /  \r\n'-----------'                                                      `   \r\n                                                                       ");
 
-        private static List<Product> inventory = new();
-        private static List<Order> orders = new();
+        ReadString("Press enter key to continue logging in!");
+        Console.Clear();
 
+    }
 
-        internal static void initializeStock()
-        {
+    public static void ShowMainMenu()
+    {
+        Console.WriteLine("********************");
+        Console.WriteLine("* Select an Action *");
+        Console.WriteLine("********************");
 
+        Console.WriteLine("1 - Inventory Management");
+        Console.WriteLine("2 - Order management");
+        Console.WriteLine("0 - Close application");
+
+        int choice = ReadInt("Your selection:");
+
+        switch (choice) 
+        { 
+            case 1:
+                Console.Clear();
+                ShowInventoryManagement();
+                break;
         }
 
-        public static void PrintWelcome()
-        {
-            Console.WriteLine("                            .-'''-.        .-'''-.           _..._     \r\n                           '   _    \\     '   _    \\      .-'_..._''.  \r\n_________   _...._       /   /` '.   \\  /   /` '.   \\   .' .'      '.\\ \r\n\\        |.'      '-.   .   |     \\  ' .   |     \\  '  / .'            \r\n \\        .'```'.    '. |   '      |  '|   '      |  '. '              \r\n  \\      |       \\     \\\\    \\     / / \\    \\     / / | |              \r\n   |     |        |    | `.   ` ..' /   `.   ` ..' /  | |              \r\n   |      \\      /    .     '-...-'`       '-...-'`   . '              \r\n   |     |\\`'-.-'   .'                                 \\ '.          . \r\n   |     | '-....-'`                                    '. `._____.-'/ \r\n  .'     '.                                               `-.______ /  \r\n'-----------'                                                      `   \r\n                                                                       ");
+    }
 
-            Console.WriteLine("Press enter key to continue logging in!");
-            Console.ReadLine();
+    public static void ShowInventoryManagement()
+    {
+        bool running = true;
+
+        while (running) 
+        {
+            Console.WriteLine("\n");
+            Console.WriteLine("********************");
+            Console.WriteLine("* Inventory Management *");
+            Console.WriteLine("********************");
+
+            foreach (Product itens in inventory)
+            {
+                Console.WriteLine("\n");
+                itens.DisplayDetailsShort();
+                Console.WriteLine("\n");
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("What do you mean?");
+
+            Console.ResetColor();
+            Console.WriteLine("1 - View details of product");
+            Console.WriteLine("2 - Add new product");
+            Console.WriteLine("3 - Clone product");
+            Console.WriteLine("4 - View products with low stock");
+            Console.WriteLine("0 - back to main menu");
+            int choice = ReadIntLine("Your selection: ");
+
+            switch (choice)
+            {
+
+                case 1:
+
+                    int idOption = ReadInt("What's the id of product that you want see");
+
+                    try
+                    {
+                        Product itens = inventory.Single(x => x.Id == idOption);
+                        Console.WriteLine("\n");
+                        itens.DisplayDetailsFull();
+                        Console.WriteLine("\n");
+
+
+                        Console.WriteLine("What you want to do?");
+                        Console.WriteLine("1 - Use product");
+                        Console.WriteLine("0 - Back to inventory overview");
+                        int ChoiceCase1 = ReadIntLine("Your selection: ");
+
+                        switch (ChoiceCase1)
+                        {
+                            case 1:
+
+                                int QntUso = ReadInt($"Want to use how much items of {itens.Name}");
+
+                                itens.UseProduct(QntUso);
+                                
+                                Console.ReadLine();
+                                Console.Clear();
+                                break;
+
+                            case 0:
+                                Console.Clear();
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Not exist one product with this ID");
+                    }
+                    break;
+
+                case 2:
+
+                    inventory.Add(ProductFactory.CreateProduct());
+                    Console.Clear();
+                    break;
+
+                case 3:
+
+                    int idClone = ReadInt("What's the id of product that you want see");
+
+                    Product item = inventory.Single(x => x.Id == idClone);
+
+                    inventory.Add(ProductFactory.CloneProduct(item));
+
+                    break;
+
+                case 4:
+
+                    IEnumerable<Product> ListBelowStock = inventory.Where(x => x.IsBelowStockThreshSold == true);
+
+                    Console.WriteLine("The following items are low on stock, order more soon!");
+
+                    foreach (Product itensLow in ListBelowStock)
+                    {
+                        Console.WriteLine("\n");
+                        itensLow.DisplayDetailsShort();
+                    }
+
+                    Console.ReadLine();
+                    Console.Clear();
+                    break;
+
+                case 0:
+                    Console.Clear();
+                    running = false;
+                    break;
+            }
 
         }
+    }
+    public static int ReadInt(string message)
+    {
+        Console.WriteLine(message);
+        return int.Parse(Console.ReadLine());
+    }
 
-        public static void ShowMainMenu()
-        {
-            Console.WriteLine("TESTE");
-        }
+    public static int ReadIntLine(string message)
+    {
+        Console.Write(message);
+        return int.Parse(Console.ReadLine());
+    }
 
+    public static string ReadString(string message)
+    {
+        Console.WriteLine(message);
+        return Console.ReadLine();
     }
 }

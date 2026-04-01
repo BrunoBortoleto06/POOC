@@ -6,6 +6,7 @@ namespace POOC.Domain.ProductManagement;
 
 public partial class Product
 {
+    
     public int Id { get; private set; }
     private string _name = string.Empty;
     private string? _description;
@@ -120,43 +121,6 @@ public partial class Product
         Console.WriteLine(sb.ToString());
     }
 
-    public static Product NewProduct()
-    {
-
-        Console.WriteLine("Qual o nome do produto?");
-        string productName = Console.ReadLine();
-
-
-        Console.WriteLine("Qual o ID?");
-        int id = int.Parse(Console.ReadLine());
-
-
-        Console.WriteLine("Qual a descrição?");
-        string description = Console.ReadLine();
-
-        Console.WriteLine("Qual o maximo de itens no estoque?");
-        int maxItemInStock = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Qual o preço?");
-        int priceValue = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Qual a moeda?");
-
-        foreach (var item in Enum.GetValues<Currency>())
-        {
-            Console.WriteLine($"{(int)item} - {item}");
-        }
-
-        int currencyInput = int.Parse(Console.ReadLine());
-        Currency currency = (Currency)currencyInput;
-
-        Price price = new Price(int.Parse(Console.ReadLine()), currency);
-
-        Product produto = new(id, productName, description, maxItemInStock, price, UnitType.PerItem);
-
-        return produto;
-
-    }
 }
 
     
