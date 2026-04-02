@@ -4,7 +4,7 @@ public class Order
 {
     public int Id { get; set; }
     public DateTime OrderFulfilmentDate { get; set; }
-    public List<OrderItem> OrdemItems { get; set; }
+    public List<OrderItem> OrderItems { get; set; }
     public bool FulFilled { get; set;  } = false;
 
     public Order()
@@ -14,14 +14,14 @@ public class Order
         int numberOfSeconds = new Random().Next(100);
         this.OrderFulfilmentDate = DateTime.Now.AddSeconds(numberOfSeconds);
 
-        this.OrdemItems = new List<OrderItem>();
+        this.OrderItems = new List<OrderItem>();
     }
 
     public void ShowOrderDetails()
     {
-        if (OrdemItems != null)
+        if (OrderItems != null)
         {
-            foreach (var item in OrdemItems)
+            foreach (var item in OrderItems)
             {
                 Console.WriteLine($"{item.ProductID}, {item.ProductName}, {item.AmountOrdered}");
             }

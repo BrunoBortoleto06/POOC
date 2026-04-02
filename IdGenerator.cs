@@ -18,7 +18,7 @@ public static class IdGenerator
 
     public static int NextIdOrder()
     {
-        return _nextIdOrderItem++;
+        return _nextIdOrder++;
     }
 
 }

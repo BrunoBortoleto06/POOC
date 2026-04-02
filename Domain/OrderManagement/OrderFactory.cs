@@ -11,10 +11,10 @@ public class OrderFactory
 
         int id = IdGenerator.NextIdOrder();
 
-        order.OrdemItems.Add(CreateOrderItem(product));
+        order.OrderItems.Add(CreateOrderItem(product));
 
 
-        return new Order() { Id = id, OrdemItems = order.OrdemItems, OrderFulfilmentDate = order.OrderFulfilmentDate};
+        return new Order() { Id = id, OrderItems = order.OrderItems, OrderFulfilmentDate = order.OrderFulfilmentDate};
     }
 
     public static OrderItem CreateOrderItem(Product product)
