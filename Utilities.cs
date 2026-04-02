@@ -1,4 +1,5 @@
-﻿using POOC.Domain.OrderManagement;
+﻿using Microsoft.VisualBasic.FileIO;
+using POOC.Domain.OrderManagement;
 using POOC.Domain.ProductManagement;
 using System;
 using System.Collections.Generic;
@@ -33,21 +34,6 @@ internal class Utilities
         Console.WriteLine("1 - Inventory Management");
         Console.WriteLine("2 - Order management");
         Console.WriteLine("0 - Close application");
-
-        int choice = ReadInt("Your selection:");
-
-        switch (choice) 
-        { 
-            case 1:
-                Console.Clear();
-                ShowInventoryManagement();
-                break;
-
-            case 2:
-                Console.Clear();
-                ShowOrderManagement();
-                break;
-        }
 
     }
 
@@ -166,10 +152,84 @@ internal class Utilities
 
     public static void ShowOrderManagement()
     {
-        Console.WriteLine("1 - Open order overview");
-        Console.WriteLine("2 - Add new orders");
-        Console.WriteLine("0 - back to main menu");
-        int choice = ReadIntLine("Your selection: ");
+        bool running = true;
+
+        while (running)
+        {
+            Console.WriteLine("1 - Open order overview");
+            Console.WriteLine("2 - Add new orders");
+            Console.WriteLine("0 - back to main menu");
+            int choice = ReadIntLine("Your selection: ");
+
+            switch (choice)
+            {
+
+                case 1:
+                    if (orders.Count > 0)
+                    {
+                        Console.WriteLine("Open orders:");
+
+                        foreach (Order order in orders)
+                        {
+                            order.ShowOrderDetails();
+                            Console.WriteLine();
+                        }
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("There are no open orders");
+                    }
+
+                    Console.ReadLine();
+                    Console.Clear();
+                    break;
+
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Creating new order");
+
+                    Console.ResetColor();
+                    foreach (Product itens in inventory)
+                    {
+                        Console.WriteLine("\n");
+                        itens.DisplayDetailsShort();
+                        Console.WriteLine("\n");
+                    }
+
+                    int idProductOption;
+
+                    do
+                    {
+                        idProductOption = Utilities.ReadInt("Which product do you want to order? (enter 0 to stop adding new products to the order)");
+                        if (idProductOption != 0)
+                        {
+
+
+                            try
+                            {
+
+                                Product item = inventory.Single(x => x.Id == idProductOption);
+
+                                Order order = OrderFactory.CreateOrder(item);
+                                orders.Add(order);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Nao existe item come esse ID");
+                            }
+                        }
+
+                    } while (idProductOption != 0);
+
+                    break;
+
+                case 0:
+                    Console.Clear();
+                    running = false;
+                    break;
+            }
+        }
     }
 
     public static int ReadInt(string message)

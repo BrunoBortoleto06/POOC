@@ -2,10 +2,10 @@
 
 public class OrderItem
 {
-    public int Id { get; private set; }
-    public int ProductID { get; private set; }
-    public string ProductName { get; private set; } = string.Empty;
-    public int AmountOrdered { get; private set; }
+    public int Id { get; set; }
+    public int ProductID { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public int AmountOrdered { get; set; }
 
     public override string ToString()
     {

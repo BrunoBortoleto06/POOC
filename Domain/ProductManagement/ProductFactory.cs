@@ -12,7 +12,7 @@ public class ProductFactory
     public static Product CreateProduct()
     {
 
-        int id = IdGenerator.NextID();
+        int id = IdGenerator.NextIdProduct();
 
         string productName = Utilities.ReadString("\nQual o nome do produto?");
 
@@ -35,7 +35,7 @@ public class ProductFactory
     public static Product CloneProduct(Product produto)
     {
 
-        int id = IdGenerator.NextID(); 
+        int id = IdGenerator.NextIdProduct(); 
 
         string productName = produto.Name;
 
