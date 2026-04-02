@@ -11,8 +11,8 @@ namespace POOC;
 
 internal class Utilities
 {
-
-    private static List<Product> inventory = new();
+    private static ProductRepository _productRepository = new ProductRepository();
+    private static List<Product> inventory = _productRepository.LoadProductsFromFile();
     private static List<Order> orders = new();
 
 
@@ -93,7 +93,9 @@ internal class Utilities
                                 int QntUso = ReadInt($"Want to use how much items of {itens.Name}");
 
                                 itens.UseProduct(QntUso);
-                                
+                                _productRepository.SaveProductsToFile(inventory);
+
+
                                 Console.ReadLine();
                                 Console.Clear();
                                 break;
@@ -112,6 +114,7 @@ internal class Utilities
                 case 2:
 
                     inventory.Add(ProductFactory.CreateProduct());
+                    _productRepository.SaveProductsToFile(inventory);
                     Console.Clear();
                     break;
 
@@ -122,6 +125,7 @@ internal class Utilities
                     Product item = inventory.Single(x => x.Id == idClone);
 
                     inventory.Add(ProductFactory.CloneProduct(item));
+                    _productRepository.SaveProductsToFile(inventory);
 
                     break;
 
@@ -213,6 +217,7 @@ internal class Utilities
 
                                 Order order = OrderFactory.CreateOrder(item);
                                 orders.Add(order);
+                                _productRepository.SaveProductsToFile(inventory);
                             }
                             catch (Exception ex)
                             {
