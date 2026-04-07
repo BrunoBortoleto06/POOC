@@ -13,7 +13,9 @@ internal class Utilities
 {
     private static ProductRepository _productRepository = new ProductRepository();
     private static List<Product> inventory = _productRepository.LoadProductsFromFile();
-    private static List<Order> orders = new();
+
+    private static OrderRepository _orderRepository = new OrderRepository();
+    private static List<Order> orders = _orderRepository.LoadOrdersFromFile();
 
 
     public static void PrintWelcome()
@@ -41,7 +43,7 @@ internal class Utilities
     {
         bool running = true;
 
-        while (running) 
+        while (running)
         {
             Console.WriteLine("\n");
             Console.WriteLine("********************");
@@ -217,7 +219,9 @@ internal class Utilities
 
                                 Order order = OrderFactory.CreateOrder(item);
                                 orders.Add(order);
+
                                 _productRepository.SaveProductsToFile(inventory);
+                                _orderRepository.SaveOrdersToFile(orders);
                             }
                             catch (Exception ex)
                             {
